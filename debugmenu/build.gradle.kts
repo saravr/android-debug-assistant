@@ -6,6 +6,8 @@ plugins {
     id("kotlin-parcelize")
     id("maven-publish")
     id("com.sandymist.mobile.plugin.interceptor")
+
+    alias(libs.plugins.kotlin.compose)
 }
 
 android {

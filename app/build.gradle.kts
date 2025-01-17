@@ -41,7 +41,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.debugassistant)
+    //implementation(libs.debugassistant)
     implementation("com.sandymist.android:debugmenu:0.0.1")
 
     implementation(libs.androidx.core.ktx)

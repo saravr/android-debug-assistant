@@ -3,6 +3,7 @@ package com.sandymist.android.debuglib.db
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface NetworkLogDao {
@@ -10,5 +11,5 @@ interface NetworkLogDao {
     suspend fun insert(entity: NetworkLogEntity)
 
     @Query("SELECT * FROM network_log")
-    suspend fun getAll(): List<NetworkLogEntity>
+    fun getAll(): Flow<List<NetworkLogEntity>>
 }
