@@ -27,6 +27,8 @@ android {
             isMinifyEnabled = true
             setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro", "consumer-rules.pro"))
         }
+        named("debug") {
+        }
     }
 
     sourceSets {

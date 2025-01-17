@@ -26,6 +26,8 @@ android {
             isMinifyEnabled = true
             setProguardFiles(listOf(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro", "consumer-rules.pro"))
         }
+        named("debug") {
+        }
     }
 
     sourceSets {
@@ -77,6 +79,11 @@ dependencies {
     // serialization
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.kotlinx.serialization.json)
+
+    // room
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
 
     implementation(libs.timber)
 
