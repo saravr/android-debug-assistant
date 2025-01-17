@@ -3,6 +3,7 @@ package com.sandymist.android.debuglib.ui.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.sandymist.android.debuglib.model.NetworkLog
 import com.sandymist.android.debuglib.repository.NetworkLogRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -12,7 +13,7 @@ import kotlinx.coroutines.launch
 class NetworkLogViewModel (
     private val networkLogRepository: NetworkLogRepository,
 ): ViewModel() {
-    private val _networkLogList = MutableStateFlow<List<String>>(emptyList())
+    private val _networkLogList = MutableStateFlow<List<NetworkLog>>(emptyList())
     val networkLogList = _networkLogList.asStateFlow()
 
     init {

@@ -7,6 +7,7 @@ import com.sandymist.android.debuglib.db.DebugLibDatabase
 import com.sandymist.android.debuglib.db.DebugLibDatabaseProvider
 import com.sandymist.android.debuglib.db.NetworkLogDao
 import com.sandymist.android.debuglib.db.NetworkLogEntity
+import com.sandymist.android.debuglib.model.NetworkLog
 import com.sandymist.android.debuglib.repository.NetworkLogRepository
 import com.sandymist.android.debuglib.ui.viewmodel.NetworkLogViewModel
 import com.sandymist.android.debuglib.ui.viewmodel.NetworkLogViewModelFactory
@@ -17,7 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 object DebugLib {
-    private val networkLogFlow = MutableStateFlow("")
+    private val networkLogFlow = MutableStateFlow<NetworkLog?>(null)
     private val scope = CoroutineScope(Dispatchers.IO)
     private lateinit var database: DebugLibDatabase
     private lateinit var networkLogDao: NetworkLogDao
@@ -35,19 +36,22 @@ object DebugLib {
         networkLogViewModel = ViewModelProvider(viewModelStore, factory)[NetworkLogViewModel::class.java]
 
         scope.launch {
-            networkLogFlow.collect {
-                networkLogDao.insert(NetworkLogEntity(name = it))
+            networkLogFlow.collect { networkLog ->
+                networkLog?.let {
+                    networkLogDao.insert(NetworkLogEntity.fromNetworkLog(networkLog))
+                }
             }
         }
     }
 
-    fun insertLog(log: String) {
+    fun insertNetworkLog(networkLog: NetworkLog) {
         scope.launch {
-            networkLogFlow.emit(log)
+            networkLogFlow.emit(networkLog)
         }
     }
 
-    fun clear() {
+    @Suppress("unused")
+    fun shutdown() {
         viewModelStore.clear()
         scope.cancel()
     }

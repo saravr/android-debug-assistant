@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
 
     implementation(libs.timber)
+    implementation(libs.android.utilities)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

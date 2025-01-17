@@ -10,6 +10,6 @@ interface NetworkLogDao {
     @Insert
     suspend fun insert(entity: NetworkLogEntity)
 
-    @Query("SELECT * FROM network_log")
+    @Query("SELECT * FROM network_log ORDER BY timestamp DESC")
     fun getAll(): Flow<List<NetworkLogEntity>>
 }
