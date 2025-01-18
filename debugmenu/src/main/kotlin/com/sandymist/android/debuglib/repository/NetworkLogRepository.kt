@@ -23,4 +23,10 @@ class NetworkLogRepository(
             }
         }
     }
+
+    fun clear() {
+        scope.launch {
+            networkLogDao.clearAll()
+        }
+    }
 }

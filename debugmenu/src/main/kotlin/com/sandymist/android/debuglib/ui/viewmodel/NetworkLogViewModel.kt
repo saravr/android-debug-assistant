@@ -23,6 +23,10 @@ class NetworkLogViewModel (
             }
         }
     }
+
+    fun clear() {
+        networkLogRepository.clear()
+    }
 }
 
 class NetworkLogViewModelFactory(

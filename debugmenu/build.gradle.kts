@@ -52,6 +52,7 @@ android {
 
     buildFeatures {
         buildConfig = true
+        compose = true
     }
 
     packaging {
@@ -73,6 +74,7 @@ dependencies {
 
     // dagger/hilt
     implementation(libs.hilt.android)
+    debugImplementation(libs.ui.tooling)
     ksp(libs.hilt.android.compiler)
 
     // retrofit
