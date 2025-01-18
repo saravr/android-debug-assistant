@@ -2,7 +2,6 @@ package com.sandymist.android.debuglib.di
 
 import android.content.Context
 import com.sandymist.android.debuglib.db.DebugLibDatabase
-import com.sandymist.android.debuglib.db.DebugLibDatabaseProvider
 import com.sandymist.android.debuglib.db.NetworkLogDao
 import dagger.Module
 import dagger.Provides
@@ -17,7 +16,7 @@ object DatabaseModule {
     @Provides
     @Singleton
     fun provideDatabase(context: Context): DebugLibDatabase {
-        return DebugLibDatabaseProvider.getDatabase(context)
+        return DebugLibDatabase.getDatabase(context)
     }
 
     @Provides

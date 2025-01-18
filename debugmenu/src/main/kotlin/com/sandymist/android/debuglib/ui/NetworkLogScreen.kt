@@ -37,23 +37,25 @@ import com.sandymist.android.debuglib.ui.viewmodel.NetworkLogViewModel
 @Suppress("unused")
 @Composable
 fun NetworkLogScreen(
+    modifier: Modifier = Modifier,
     networkLogViewModel: NetworkLogViewModel,
 ) {
     val networkLog by networkLogViewModel.networkLogList.collectAsStateWithLifecycle()
 
-    NetworkLogList(networkLog) {
+    NetworkLogList(modifier, networkLog) {
         networkLogViewModel.clear()
     }
 }
 
 @Composable
 fun NetworkLogList(
+    modifier: Modifier = Modifier,
     logList: List<NetworkLog>,
     onClear: () -> Unit,
 ) {
     if (logList.isEmpty()) {
         Box(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
             Text("No logs found")
@@ -62,7 +64,7 @@ fun NetworkLogList(
     }
 
     LazyColumn(
-        modifier = Modifier
+        modifier = modifier
             .padding(horizontal = 16.dp, vertical = 8.dp)
             .fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -133,11 +135,11 @@ fun PreviewNetworkLogScreen() {
             method = "POST",
         ),
     )
-    NetworkLogList(logList) {}
+    NetworkLogList(logList = logList) {}
 }
 
 @Preview
 @Composable
 fun PreviewEmptyNetworkLogScreen() {
-    NetworkLogList(emptyList()) {}
+    NetworkLogList(logList = emptyList()) {}
 }

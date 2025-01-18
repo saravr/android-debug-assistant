@@ -4,7 +4,6 @@ import android.content.Context
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelStore
 import com.sandymist.android.debuglib.db.DebugLibDatabase
-import com.sandymist.android.debuglib.db.DebugLibDatabaseProvider
 import com.sandymist.android.debuglib.db.NetworkLogDao
 import com.sandymist.android.debuglib.db.NetworkLogEntity
 import com.sandymist.android.debuglib.model.NetworkLog
@@ -28,7 +27,7 @@ object DebugLib {
 
     @Suppress("unused")
     fun init(context: Context) {
-        database = DebugLibDatabaseProvider.getDatabase(context)
+        database = DebugLibDatabase.getDatabase(context)
         networkLogDao = database.networkLogDao()
         networkLogRepository = NetworkLogRepository(networkLogDao)
 
