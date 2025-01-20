@@ -1,7 +1,6 @@
-@file:Suppress("PackageDirectoryMismatch")
-package com.sandymist.mobile.plugins.network
+//@file:Suppress("PackageDirectoryMismatch")
+package com.sandymist.android.debuglib
 
-import com.sandymist.android.debuglib.DebugLib
 import com.sandymist.android.debuglib.model.NetworkLog
 import okhttp3.Interceptor
 import okhttp3.Response
@@ -22,7 +21,7 @@ class NetworkPlugin: Interceptor {
         val networkLog = NetworkLog(
             responseCode = response.code(),
             url = url.toString(),
-            method = request.method(),
+            method = "AA:" + request.method(),
             body = "", //response.body().toString(),
             requestHeaders = "", //request.headers().toString(),
             responseHeaders = "", //response.headers().toString(),
