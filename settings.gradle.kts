@@ -23,6 +23,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "DebugAssistant"
-include(":app")
-include(":debugassistant")
+//include(":app")
+//include(":debugassistant")
 include(":debugmenu")

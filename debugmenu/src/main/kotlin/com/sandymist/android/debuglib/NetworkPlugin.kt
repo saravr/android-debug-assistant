@@ -1,4 +1,3 @@
-//@file:Suppress("PackageDirectoryMismatch")
 package com.sandymist.android.debuglib
 
 import com.sandymist.android.debuglib.model.NetworkLog
@@ -21,7 +20,7 @@ class NetworkPlugin: Interceptor {
         val networkLog = NetworkLog(
             responseCode = response.code(),
             url = url.toString(),
-            method = "AA:" + request.method(),
+            method = request.method(),
             body = "", //response.body().toString(),
             requestHeaders = "", //request.headers().toString(),
             responseHeaders = "", //response.headers().toString(),
