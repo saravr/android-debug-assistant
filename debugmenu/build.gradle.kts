@@ -5,7 +5,6 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("maven-publish")
-    id("com.sandymist.mobile.plugin.interceptor")
 
     alias(libs.plugins.kotlin.compose)
 }
