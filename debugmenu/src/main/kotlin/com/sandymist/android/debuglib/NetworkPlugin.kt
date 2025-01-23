@@ -11,9 +11,6 @@ class NetworkPlugin: Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
 
-//        Timber.e("Request method: ${request.method()}")
-//        Timber.e("Request headers: ${request.headers()}")
-
         val url = request.url()
         val startTime = System.nanoTime()
         val response: Response = chain.proceed(request)
@@ -30,13 +27,6 @@ class NetworkPlugin: Interceptor {
             turnaroundTime = endTime - startTime,
         )
         DebugLib.insertNetworkLog(networkLog)
-
-//        // Log the response details
-//        Timber.e("Received response for URL: ${response.request().url()}")
-//        Timber.e("Response code: ${}")
-//        Timber.e("Response headers: ${response.headers()}")
-//        Timber.e("Request-Response time: ${(endTime - startTime) / 1e6} ms")
-
         return response
     }
 }
