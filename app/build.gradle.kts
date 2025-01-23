@@ -49,8 +49,9 @@ android {
 }
 
 dependencies {
-    implementation(project(":debugmenu"))
-//    implementation(libs.debugmenu)
+//    implementation(project(":debugmenu"))
+    debugImplementation(libs.debugmenu.debug)
+    releaseImplementation(libs.debugmenu.no.op)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

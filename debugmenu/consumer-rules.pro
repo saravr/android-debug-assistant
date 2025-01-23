@@ -1,5 +1,9 @@
 # consumer-rules.pro
 
+-keepclassmembers class com.sandymist.android.debuglib.DebugLib {
+    public *;
+}
+
 # Keep kotlinx.serialization classes and annotations
 -keep class kotlinx.serialization.** { *; }
 -keep @kotlinx.serialization.Serializable class * { *; }

@@ -33,10 +33,29 @@ android {
     }
 
     sourceSets {
-        all {
-            java {
-                setSrcDirs(listOf("src/main/kotlin"))
-            }
+//        // Configure the main source set (common for all)
+//        main {
+//            java.srcDirs("src/main/kotlin")
+//            // Add other necessary directories like resources, etc.
+//        }
+
+        // Configure the debug source set
+        getByName("debug") {
+            java.srcDirs("src/debug/kotlin")
+            // You can also add additional directories like "src/debug/java" if needed
+        }
+
+        // Configure the release source set
+        getByName("release") {
+            java.srcDirs("src/release/kotlin")
+            // You can customize release-specific source directories here
+        }
+
+        // Configure the qa source set
+        getByName("qa") {
+            java.srcDirs("src/debug/kotlin") // Use src/qa/kotlin for QA build type
+            // If QA should use the same resources as Debug, you can add that as well:
+            res.srcDirs("src/debug/res")
         }
     }
 
@@ -117,6 +136,15 @@ configure<PublishingExtension> {
         version = rootProject.extra["projectVersion"] as String
         afterEvaluate {
             from(components["qa"])
+        }
+    }
+
+    publications.create<MavenPublication>("no-op") {
+        groupId = "com.sandymist.android"
+        artifactId = "debugmenu-no-op"
+        version = rootProject.extra["projectVersion"] as String
+        afterEvaluate {
+            from(components["release"])
         }
     }
 
