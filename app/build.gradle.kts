@@ -2,7 +2,14 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    id("com.google.devtools.ksp")
+    id("com.google.dagger.hilt.android")
     id("com.sandymist.mobile.plugin.interceptor")
+}
+
+interceptor {
+    targetClassName = "com.sandymist.mobile.plugins.network.NetworkPlugin"
 }
 
 android {
@@ -41,7 +48,8 @@ android {
 }
 
 dependencies {
-    implementation(libs.debugmenu)
+    implementation(project(":debugmenu"))
+//    implementation(libs.debugmenu)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -52,7 +60,17 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // for testing
+    implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // Use the latest version
+
+    // timber
+    implementation(libs.timber)
+
+    // hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

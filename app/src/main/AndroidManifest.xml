@@ -12,6 +12,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:name="com.sandymist.android.debugassistant.DemoApp"
         android:theme="@style/Theme.DebugAssistant"
         tools:targetApi="31">
         <activity

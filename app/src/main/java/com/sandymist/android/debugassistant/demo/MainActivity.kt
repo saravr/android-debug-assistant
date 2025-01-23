@@ -1,34 +1,44 @@
 package com.sandymist.android.debugassistant.demo
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import com.sandymist.android.debugassistant.ui.theme.DebugAssistantTheme
+import com.sandymist.android.debuglib.ui.DebugActivity
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
+import timber.log.Timber
 import java.io.IOException
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    private val loggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY // Logs request and response bodies
+    }
     private val client = OkHttpClient.Builder()
-        .addInterceptor(LoggingInterceptor())
+        .addInterceptor(loggingInterceptor)
         .build()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,12 +47,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             DebugAssistantTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Greeting(
+                    DebugScreen(
                         modifier = Modifier.padding(innerPadding),
                         performGetRequest = {
                             performGetRequest(it)
-                        }
-                    )
+                        },
+                    ) {
+                        val intent = Intent(this, DebugActivity::class.java)
+                        startActivity(intent)
+                    }
                 }
             }
         }
@@ -61,43 +74,40 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(
-    modifier: Modifier = Modifier, performGetRequest: (String) -> String,
+fun DebugScreen(
+    modifier: Modifier = Modifier,
+    performGetRequest: (String) -> String,
+    launchDebugActivity: () -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var response by remember { mutableStateOf("") }
+    var counter by remember { mutableIntStateOf(5) }
 
     LaunchedEffect(Unit) {
         scope.launch(Dispatchers.IO) {
-            val url = "https://jsonplaceholder.typicode.com/posts/1"
-            response = try {
-                response = performGetRequest(url)
-                Log.d("OkHttpExample", response)
-                response
-            } catch (e: Exception) {
-                Log.e("OkHttpExample", "Error: ${e.message}")
-                "Exception: ${e.javaClass.name} - ${e.message}"
+            while (--counter >= 0) {
+                val url = "https://jsonplaceholder.typicode.com/posts/1"
+                try {
+                    val response = performGetRequest(url)
+                    Timber.d(response)
+                } catch (e: Exception) {
+                    Timber.e("Error: ${e.message}")
+                    "Exception: ${e.javaClass.name} - ${e.message}"
+                }
+                delay(2000L)
             }
         }
     }
 
-    Text(
-        text = "Response: $response",
-        modifier = modifier
-    )
-}
-
-class LoggingInterceptor : Interceptor {
-    override fun intercept(chain: Interceptor.Chain): Response {
-        val request = chain.request()
-        Log.d("LoggingInterceptor", "Request URL: ${request.url}")
-        Log.d("LoggingInterceptor", "Request Headers: ${request.headers}")
-
-        val response = chain.proceed(request)
-
-        Log.d("LoggingInterceptor", "Response Code: ${response.code}")
-        Log.d("LoggingInterceptor", "Response Headers: ${response.headers}")
-
-        return response
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center,
+    ) {
+        Button(
+            onClick = {
+                launchDebugActivity()
+            }
+        ) {
+            Text("Launch Debug Screen")
+        }
     }
 }
