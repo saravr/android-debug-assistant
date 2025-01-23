@@ -1,12 +1,10 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("com.google.devtools.ksp")
+    kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("maven-publish")
-
-    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -14,7 +12,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 25
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -42,6 +40,10 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     kotlinOptions {
@@ -74,7 +76,7 @@ dependencies {
     // dagger/hilt
     implementation(libs.hilt.android)
     debugImplementation(libs.ui.tooling)
-    ksp(libs.hilt.android.compiler)
+    kapt(libs.hilt.android.compiler)
 
     // retrofit
     implementation(libs.retrofit)
@@ -85,7 +87,7 @@ dependencies {
 
     // room
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     implementation(libs.timber)

@@ -3,7 +3,7 @@ import com.android.build.api.dsl.LibraryBuildType
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("com.google.devtools.ksp")
+    kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("maven-publish")
@@ -14,7 +14,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 25
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -65,7 +65,7 @@ dependencies {
 
     // dagger/hilt
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
+    kapt(libs.hilt.android.compiler)
 
     // retrofit
     implementation(libs.retrofit)
