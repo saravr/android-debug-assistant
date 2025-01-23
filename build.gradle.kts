@@ -8,4 +8,4 @@ plugins {
     id("com.google.dagger.hilt.android") version "2.51.1" apply false
 }
 
-val projectVersion: String by extra("0.0.15")
+val projectVersion: String by extra("0.0.10")
