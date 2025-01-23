@@ -27,6 +27,9 @@ android {
         }
         named("debug") {
         }
+        maybeCreate("qa").apply {
+            initWith(getByName("debug")) // Optional: inherit configurations from debug
+        }
     }
 
     sourceSets {
@@ -101,10 +104,19 @@ dependencies {
 configure<PublishingExtension> {
     publications.create<MavenPublication>("debug") {
         groupId = "com.sandymist.android"
-        artifactId = "debugmenu"
+        artifactId = "debugmenu-debug"
         version = rootProject.extra["projectVersion"] as String
         afterEvaluate {
             from(components["debug"])
+        }
+    }
+
+    publications.create<MavenPublication>("qa") {
+        groupId = "com.sandymist.android"
+        artifactId = "debugmenu-qa"
+        version = rootProject.extra["projectVersion"] as String
+        afterEvaluate {
+            from(components["qa"])
         }
     }
 
