@@ -10,8 +10,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.sandymist.android.debugassistant.ui.theme.DebugAssistantTheme
-import com.sandymist.android.debuglib.DebugLib
-import com.sandymist.android.debuglib.ui.NetworkLogScreen
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -24,7 +22,6 @@ import java.io.IOException
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    private val networkLogViewModel = DebugLib.networkLogViewModel
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }
@@ -41,10 +38,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             DebugAssistantTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    NetworkLogScreen(
-                        modifier = Modifier.padding(innerPadding),
-                        networkLogViewModel = networkLogViewModel,
-                    )
+                    DebugScreen(modifier = Modifier.padding(innerPadding))
                 }
             }
         }
