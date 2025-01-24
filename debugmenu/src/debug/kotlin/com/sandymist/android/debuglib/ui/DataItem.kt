@@ -1,4 +1,4 @@
-package com.sandymist.android.debugassistant.demo
+package com.sandymist.android.debuglib.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

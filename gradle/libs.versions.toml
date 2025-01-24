@@ -5,7 +5,7 @@ androidUtilities = "0.0.8"
 coilComposeVersion = "2.6.0"
 constraintLayoutVersion = "1.1.0"
 datastoreVersion = "1.1.1"
-debugmenu = "0.0.10-LEG01"
+debugmenu = "0.0.11"
 firebaseBom = "33.7.0"
 firebaseFirestore = "25.1.1"
 hiltAndroid = "2.51.1"
@@ -15,7 +15,7 @@ coreKtx = "1.13.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
-kotlinxSerializationJson = "1.6.0"
+kotlinxSerializationJson = "1.7.3"
 lifecycleRuntimeKtx = "2.8.7"
 materialIconsExtendedVersion = "1.7.6"
 activityCompose = "1.9.3"
@@ -31,7 +31,6 @@ roomRuntime = "2.6.1"
 splashscreenVersion = "1.0.1"
 tikaCore = "2.9.0"
 timber = "5.0.1"
-uiTooling = "1.7.6"
 
 [libraries]
 android-utilities = { module = "com.github.saravr:android-utilities", version.ref = "androidUtilities" }
@@ -50,8 +49,8 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 androidx-ui-text-google-fonts = { module = "androidx.compose.ui:ui-text-google-fonts" }
 bugfender-android = { module = "com.bugfender.sdk:android", version.ref = "android" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilComposeVersion" }
-debugmenu-debug = { module = "com.sandymist.android:debugmenu-debug", version.ref = "debugmenu" }
-debugmenu-no-op = { module = "com.sandymist.android:debugmenu-no-op", version.ref = "debugmenu" }
+debugmenu = { module = "com.github.saravr:android-debug-assistant", version.ref = "debugmenu" }
+#debugmenu = { module = "com.sandymist.android:debugmenu", version.ref = "debugmenu" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
 firebase-config-ktx = { module = "com.google.firebase:firebase-config-ktx" }
@@ -83,7 +82,6 @@ retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit
 splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "splashscreenVersion" }
 tika-core = { module = "org.apache.tika:tika-core", version.ref = "tikaCore" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "uiTooling" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

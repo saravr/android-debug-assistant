@@ -1,4 +1,4 @@
-package com.sandymist.android.debugassistant.demo
+package com.sandymist.android.debuglib.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -15,8 +15,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sandymist.android.common.utilities.debouncedClickable
 import com.sandymist.android.debuglib.DebugLib
-import com.sandymist.android.debuglib.ui.LogcatScreen
-import com.sandymist.android.debuglib.ui.NetworkLogScreen
 
 @Composable
 fun DebugScreen(

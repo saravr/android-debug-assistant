@@ -97,7 +97,8 @@ dependencies {
 
     // dagger/hilt
     implementation(libs.hilt.android)
-    debugImplementation(libs.ui.tooling)
+    implementation(libs.androidx.hilt.navigation.compose)
+    debugImplementation(libs.androidx.ui.tooling)
     kapt(libs.hilt.android.compiler)
 
     // retrofit
