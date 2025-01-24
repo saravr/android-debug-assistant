@@ -35,6 +35,9 @@ fun DebugScreen(
                 networkLogViewModel = DebugLib.networkLogViewModel
             )
         }
+        composable("preferences") {
+            PreferencesScreen(modifier = modifier)
+        }
     }
 }
 

@@ -115,6 +115,7 @@ dependencies {
 
     implementation(libs.timber)
     implementation(libs.android.utilities)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
