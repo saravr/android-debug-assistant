@@ -20,6 +20,7 @@ import com.sandymist.android.common.utilities.debouncedClickable
 @Composable
 fun Header(
     modifier: Modifier = Modifier,
+    title: String,
     onClear: () -> Unit,
 ) {
     Row(
@@ -28,7 +29,7 @@ fun Header(
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text("Network log", style = MaterialTheme.typography.headlineSmall)
+        Text(title, style = MaterialTheme.typography.headlineSmall)
         Icon(
             imageVector = Icons.Default.Delete,
             contentDescription = "Clear all",

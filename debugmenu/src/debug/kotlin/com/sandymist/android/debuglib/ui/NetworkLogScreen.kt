@@ -41,7 +41,7 @@ fun NetworkLogScreen(
             .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.Top,
     ) {
-        Header {
+        Header(title = "Network log") {
             networkLogViewModel.clear()
         }
 

@@ -44,7 +44,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private var counter = 5
+    private var counter = 100
     private fun generateTraffic() {
         lifecycleScope.launch(Dispatchers.IO) {
             while (--counter >= 0) {
@@ -55,7 +55,7 @@ class MainActivity : ComponentActivity() {
                     Timber.e("Error: ${e.message}")
                     "Exception: ${e.javaClass.name} - ${e.message}"
                 }
-                delay(2000L)
+                delay(5000L)
             }
         }
     }

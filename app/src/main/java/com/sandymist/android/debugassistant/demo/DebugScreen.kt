@@ -15,6 +15,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.sandymist.android.common.utilities.debouncedClickable
 import com.sandymist.android.debuglib.DebugLib
+import com.sandymist.android.debuglib.ui.LogcatScreen
 import com.sandymist.android.debuglib.ui.NetworkLogScreen
 
 @Composable
@@ -26,6 +27,9 @@ fun DebugScreen(
     NavHost(navController = navController, startDestination = "debug-menu") {
         composable("debug-menu") {
             DebugMenu(modifier = modifier, navController = navController)
+        }
+        composable("logcat") {
+            LogcatScreen(modifier = modifier)
         }
         composable("network-log") {
             NetworkLogScreen(
@@ -50,6 +54,9 @@ fun DebugMenu(
 
         DataItem( label = "Network log", modifier = Modifier.debouncedClickable {
             navController.navigate("network-log")
+        })
+        DataItem( label = "Logcat", modifier = Modifier.debouncedClickable {
+            navController.navigate("logcat")
         })
         DataItem( label = "View preferences", modifier = Modifier.debouncedClickable {
             navController.navigate("preferences")
