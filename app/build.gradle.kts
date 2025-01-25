@@ -1,8 +1,13 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    kotlin("kapt")
+    id("com.google.dagger.hilt.android")
     id("com.sandymist.mobile.plugin.interceptor")
+}
+
+interceptor {
+    targetClassName = "com.sandymist.mobile.plugins.network.NetworkPlugin"
 }
 
 android {
@@ -11,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId = "com.sandymist.android.debugassistant"
-        minSdk = 26
+        minSdk = 25
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -32,6 +37,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
+    }
     kotlinOptions {
         jvmTarget = "17"
     }
@@ -41,7 +49,9 @@ android {
 }
 
 dependencies {
-    implementation(libs.debugmenu)
+    implementation(project(":debugmenu"))
+//    debugImplementation(libs.debugmenu.debug)
+//    releaseImplementation(libs.debugmenu.no.op)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -52,7 +62,20 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    implementation("com.squareup.okhttp3:okhttp:4.12.0")
+    // for testing
+    implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0") // Use the latest version
+
+    // timber
+    implementation(libs.timber)
+
+    // hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // utilities
+    implementation(libs.android.utilities)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

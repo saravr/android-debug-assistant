@@ -1,12 +1,10 @@
 plugins {
     id("com.android.library")
     kotlin("android")
-    id("com.google.devtools.ksp")
+    kotlin("kapt")
     id("dagger.hilt.android.plugin")
     id("kotlin-parcelize")
     id("maven-publish")
-
-    alias(libs.plugins.kotlin.compose)
 }
 
 android {
@@ -14,7 +12,7 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        minSdk = 26
+        minSdk = 25
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -29,19 +27,45 @@ android {
         }
         named("debug") {
         }
+        maybeCreate("qa").apply {
+            initWith(getByName("debug")) // Optional: inherit configurations from debug
+        }
     }
 
     sourceSets {
-        all {
-            java {
-                setSrcDirs(listOf("src/main/kotlin"))
-            }
+//        // Configure the main source set (common for all)
+//        main {
+//            java.srcDirs("src/main/kotlin")
+//            // Add other necessary directories like resources, etc.
+//        }
+
+        // Configure the debug source set
+        getByName("debug") {
+            java.srcDirs("src/debug/kotlin")
+            // You can also add additional directories like "src/debug/java" if needed
+        }
+
+        // Configure the release source set
+        getByName("release") {
+            java.srcDirs("src/release/kotlin")
+            // You can customize release-specific source directories here
+        }
+
+        // Configure the qa source set
+        getByName("qa") {
+            java.srcDirs("src/debug/kotlin") // Use src/qa/kotlin for QA build type
+            // If QA should use the same resources as Debug, you can add that as well:
+            res.srcDirs("src/debug/res")
         }
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
 
     kotlinOptions {
@@ -73,8 +97,9 @@ dependencies {
 
     // dagger/hilt
     implementation(libs.hilt.android)
-    debugImplementation(libs.ui.tooling)
-    ksp(libs.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+    debugImplementation(libs.androidx.ui.tooling)
+    kapt(libs.hilt.android.compiler)
 
     // retrofit
     implementation(libs.retrofit)
@@ -85,11 +110,12 @@ dependencies {
 
     // room
     implementation(libs.androidx.room.runtime)
-    ksp(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
 
     implementation(libs.timber)
     implementation(libs.android.utilities)
+    implementation(libs.androidx.datastore.preferences)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -99,10 +125,28 @@ dependencies {
 configure<PublishingExtension> {
     publications.create<MavenPublication>("debug") {
         groupId = "com.sandymist.android"
-        artifactId = "debugmenu"
+        artifactId = "debugmenu-debug"
         version = rootProject.extra["projectVersion"] as String
         afterEvaluate {
             from(components["debug"])
+        }
+    }
+
+    publications.create<MavenPublication>("qa") {
+        groupId = "com.sandymist.android"
+        artifactId = "debugmenu-qa"
+        version = rootProject.extra["projectVersion"] as String
+        afterEvaluate {
+            from(components["qa"])
+        }
+    }
+
+    publications.create<MavenPublication>("no-op") {
+        groupId = "com.sandymist.android"
+        artifactId = "debugmenu-no-op"
+        version = rootProject.extra["projectVersion"] as String
+        afterEvaluate {
+            from(components["release"])
         }
     }
 
