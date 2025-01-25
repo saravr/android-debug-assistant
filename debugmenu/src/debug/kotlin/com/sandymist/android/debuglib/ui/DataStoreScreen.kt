@@ -1,8 +1,6 @@
-@file:Suppress("DEPRECATION")
 package com.sandymist.android.debuglib.ui
 
 import android.content.Context
-import android.preference.PreferenceManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,45 +21,30 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
+import androidx.datastore.preferences.preferencesDataStoreFile
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flow
 import java.io.File
+
+/*
+ * WORK IN PROGRESS
+ */
 
 @Suppress("unused")
 @Composable
-fun PreferencesScreen(
+fun DataStoreScreen(
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
-    val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
     val items = remember { mutableStateListOf<PrefItem>() }
 
     LaunchedEffect(Unit) {
-        withContext(Dispatchers.IO) {
-            val defaultPrefs = sharedPreferences.all
-            if (defaultPrefs.isNotEmpty()) {
-                items.add(PrefItem.Header("Default"))
-            }
-            val sharedPrefsDir = File(context.filesDir.parent, "shared_prefs")
-            if (sharedPrefsDir.exists() && sharedPrefsDir.isDirectory) {
-                val sharedPrefsFiles = sharedPrefsDir.listFiles()
-                sharedPrefsFiles?.forEach { file ->
-                    val prefsName = file.nameWithoutExtension
-                    items.add(PrefItem.Header(prefsName))
-                    val sharedPrefs = context.getSharedPreferences(prefsName, Context.MODE_PRIVATE)
-                    val allEntries = sharedPrefs.all
-                    for ((key, value) in allEntries) {
-                        items.add(PrefItem.Data(key, value?.toString() ?: "Not set"))
-                    }
-                }
-            }
-
-            val dataStoreDir = File(context.filesDir, "datastore")
-            if (dataStoreDir.exists() && dataStoreDir.isDirectory) {
-                val dataStoreFiles = dataStoreDir.listFiles()
-                dataStoreFiles?.forEach { file ->
-                    println("DataStore file: ${file.name}")
-                }
+        readDataStore(context).collectLatest {
+            items.add(PrefItem.Header(it.first))
+            it.second.forEach { (t, u) ->
+                items.add(PrefItem.Data(t, u.toString()))
             }
         }
     }
@@ -71,7 +54,7 @@ fun PreferencesScreen(
             .padding(horizontal = 12.dp),
         verticalArrangement = Arrangement.Top,
     ) {
-        Header(title = "Preferences") { }
+        Header(title = "Data Store") { }
 
         if (items.isEmpty()) {
             Box(
@@ -79,19 +62,19 @@ fun PreferencesScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 Text(
-                    "No preferences found",
+                    "No datastore found",
                     textAlign = TextAlign.Center,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
         } else {
-            PreferencesList(items)
+            DataStoreList(items)
         }
     }
 }
 
 @Composable
-fun PreferencesList(preferences: List<PrefItem>) {
+fun DataStoreList(preferences: List<PrefItem>) {
     LazyColumn(
         modifier = Modifier
             .padding(horizontal = 12.dp, vertical = 8.dp),
@@ -104,14 +87,34 @@ fun PreferencesList(preferences: List<PrefItem>) {
                 }
                 is PrefItem.Data -> {
                     DataItem(label = "${item.key}: ${item.value}")
-//                    HorizontalDivider(color = Color.LightGray)
                 }
             }
         }
     }
 }
 
-sealed interface PrefItem {
-    data class Header(val title: String): PrefItem
-    data class Data(val key: String, val value: String): PrefItem
+fun readDataStore(
+    context: Context,
+): Flow<Pair<String, Map<String, Any>>> {
+    val dataStoreDir = File(context.filesDir, "datastore")
+    val dataStoreFiles = dataStoreDir.listFiles() /*?.filter { it.endsWith("pb") } ?: emptyList() */
+
+    // THIS WON'T WORK - NEED TO AVOID MULTIPLE ACCESS TO DATASTORE
+    return flow {
+        dataStoreFiles?.forEach { file ->
+            val fileName = file.nameWithoutExtension
+            val dataStore = PreferenceDataStoreFactory.create {
+                context.preferencesDataStoreFile(fileName)
+            }
+
+            dataStore.data.collectLatest { preferences ->
+                val contents = preferences.asMap().mapKeys { entry ->
+                    entry.key.name
+                }.mapValues { entry ->
+                    entry.value
+                }
+                emit(Pair(fileName, contents))
+            }
+        }
+    }
 }

@@ -38,6 +38,9 @@ fun DebugScreen(
         composable("preferences") {
             PreferencesScreen(modifier = modifier)
         }
+        composable("datastore") {
+            DataStoreScreen(modifier = modifier)
+        }
     }
 }
 
@@ -61,6 +64,9 @@ fun DebugMenu(
         })
         DataItem( label = "View preferences", modifier = Modifier.debouncedClickable {
             navController.navigate("preferences")
+        })
+        DataItem( label = "View DataStore", modifier = Modifier.debouncedClickable {
+            navController.navigate("datastore")
         })
     }
 }
